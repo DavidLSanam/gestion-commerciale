@@ -1,0 +1,29 @@
+{% extends "base.html" %}{% import "_macros.html" as m %}
+{% block content %}
+{{ m.entete(("Modifier l'" if id else "Nouvel ") ~ "approvisionnement", "truck", None, None) }}
+<div class="card shadow-sm border-0" style="max-width:640px"><div class="card-body">
+<form method="post">
+  <div class="row g-3">
+    <div class="col-md-6"><label class="form-label" for="date_appro">Date</label>
+      <input type="date" class="form-control" id="date_appro" name="date_appro" required value="{{ appro.date_appro if appro else today }}"></div>
+    <div class="col-md-6"><label class="form-label" for="id_produit">Produit</label>
+      <select class="form-select" id="id_produit" name="id_produit" required>
+        {% for p in prods %}<option value="{{ p.id_produit }}" {{ 'selected' if appro and appro.id_produit|string == p.id_produit|string }}>{{ p.designation }} ({{ p.categorie }})</option>{% endfor %}
+      </select></div>
+    <div class="col-md-6"><label class="form-label" for="quantite">Quantité achetée</label>
+      <input type="number" min="1" step="1" class="form-control" id="quantite" name="quantite" required value="{{ appro.quantite if appro else '' }}"></div>
+    <div class="col-md-6"><label class="form-label" for="prix_achat">Prix d'achat unitaire (FCFA)</label>
+      <input type="number" min="0" step="0.01" class="form-control" id="prix_achat" name="prix_achat" required value="{{ appro.prix_achat if appro else '' }}"></div>
+  </div>
+  <p class="mt-3 mb-0 text-muted">Montant total : <strong id="total">—</strong></p>
+  {{ m.boutons(url_for('appros')) }}
+</form>
+</div></div>
+{% endblock %}
+{% block scripts %}
+<script>
+const q = document.getElementById('quantite'), p = document.getElementById('prix_achat'), t = document.getElementById('total');
+function maj(){ const v=(+q.value||0)*(+p.value||0); t.textContent = v ? v.toLocaleString('fr-FR')+' FCFA' : '—'; }
+q.oninput = p.oninput = maj; maj();
+</script>
+{% endblock %}

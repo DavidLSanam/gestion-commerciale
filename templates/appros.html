@@ -1,0 +1,20 @@
+{% extends "base.html" %}{% import "_macros.html" as m %}
+{% block title %}Approvisionnements{% endblock %}
+{% block content %}
+{{ m.entete("Approvisionnements", "truck", url_for('appro_form'), "Nouvel approvisionnement") }}
+<div class="card shadow-sm border-0"><div class="card-body p-0 table-responsive">
+{% if appros %}
+<table class="table table-hover mb-0">
+  <thead class="table-light"><tr><th>Date</th><th>Produit</th><th class="text-end">Quantité</th><th class="text-end">Prix d'achat unit.</th><th class="text-end">Montant</th><th></th></tr></thead>
+  <tbody>
+  {% for a in appros %}
+    <tr><td>{{ a.date_appro }}</td><td>{{ a.designation }}</td><td class="text-end">{{ a.quantite }}</td>
+      <td class="text-end">{{ a.prix_achat|fcfa }}</td><td class="text-end">{{ a.montant|fcfa }}</td>
+      <td>{{ m.actions(url_for('appro_form', id=a.id_appro), url_for('appro_supprimer', id=a.id_appro), "cet approvisionnement") }}</td></tr>
+  {% endfor %}
+  </tbody>
+  <tfoot><tr class="fw-semibold"><td colspan="4">Total</td><td class="text-end">{{ total|fcfa }}</td><td></td></tr></tfoot>
+</table>
+{% else %}{{ m.vide("Aucun approvisionnement enregistré.") }}{% endif %}
+</div></div>
+{% endblock %}

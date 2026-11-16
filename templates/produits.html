@@ -1,0 +1,21 @@
+{% extends "base.html" %}{% import "_macros.html" as m %}
+{% block title %}Produits{% endblock %}
+{% block content %}
+{{ m.entete("Produits", "box-seam", url_for('produit_form'), "Nouveau produit") }}
+<div class="card shadow-sm border-0"><div class="card-body p-0 table-responsive">
+{% if produits %}
+<table class="table table-hover mb-0">
+  <thead class="table-light"><tr><th>#</th><th>Désignation</th><th>Catégorie</th><th class="text-end">Prix de vente</th><th class="text-end">Stock</th><th></th></tr></thead>
+  <tbody>
+  {% for p in produits %}
+    <tr><td>{{ p.id_produit }}</td><td>{{ p.designation }}</td>
+      <td><span class="badge text-bg-light border">{{ p.categorie }}</span></td>
+      <td class="text-end">{{ p.prix_vente|fcfa }}</td>
+      <td class="text-end {{ 'text-danger fw-semibold' if p.stock <= 5 }}">{{ p.stock|int }}</td>
+      <td>{{ m.actions(url_for('produit_form', id=p.id_produit), url_for('produit_supprimer', id=p.id_produit), p.designation) }}</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}{{ m.vide("Aucun produit pour l'instant.") }}{% endif %}
+</div></div>
+{% endblock %}

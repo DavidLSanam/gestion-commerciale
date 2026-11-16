@@ -1,0 +1,11 @@
+{% extends "base.html" %}{% import "_macros.html" as m %}
+{% block content %}
+{{ m.entete(("Modifier" if id else "Nouvelle") ~ " catégorie", "tags", None, None) }}
+<div class="card shadow-sm border-0" style="max-width:560px"><div class="card-body">
+<form method="post">
+  <label class="form-label" for="libelle">Libellé</label>
+  <input class="form-control" id="libelle" name="libelle" required maxlength="100" value="{{ cat.libelle if cat else '' }}" autofocus>
+  {{ m.boutons(url_for('categories')) }}
+</form>
+</div></div>
+{% endblock %}

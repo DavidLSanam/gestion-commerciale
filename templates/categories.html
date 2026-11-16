@@ -1,0 +1,18 @@
+{% extends "base.html" %}{% import "_macros.html" as m %}
+{% block title %}Catégories{% endblock %}
+{% block content %}
+{{ m.entete("Catégories de produits", "tags", url_for('categorie_form'), "Nouvelle catégorie") }}
+<div class="card shadow-sm border-0"><div class="card-body p-0">
+{% if categories %}
+<table class="table table-hover mb-0">
+  <thead class="table-light"><tr><th>#</th><th>Libellé</th><th class="text-end">Nb produits</th><th></th></tr></thead>
+  <tbody>
+  {% for c in categories %}
+    <tr><td>{{ c.id_categorie }}</td><td>{{ c.libelle }}</td><td class="text-end">{{ c.nb_produits }}</td>
+      <td>{{ m.actions(url_for('categorie_form', id=c.id_categorie), url_for('categorie_supprimer', id=c.id_categorie), c.libelle) }}</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}{{ m.vide("Aucune catégorie pour l'instant.") }}{% endif %}
+</div></div>
+{% endblock %}

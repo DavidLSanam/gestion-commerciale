@@ -1,0 +1,17 @@
+{% extends "base.html" %}{% import "_macros.html" as m %}
+{% block content %}
+{{ m.entete(("Modifier la" if id else "Nouvelle") ~ " dépense", "wallet2", None, None) }}
+<div class="card shadow-sm border-0" style="max-width:640px"><div class="card-body">
+<form method="post">
+  <div class="row g-3">
+    <div class="col-md-6"><label class="form-label" for="date_depense">Date</label>
+      <input type="date" class="form-control" id="date_depense" name="date_depense" required value="{{ dep.date_depense if dep else today }}"></div>
+    <div class="col-md-6"><label class="form-label" for="montant">Montant (FCFA)</label>
+      <input type="number" min="0" step="0.01" class="form-control" id="montant" name="montant" required value="{{ dep.montant if dep else '' }}"></div>
+    <div class="col-12"><label class="form-label" for="libelle">Libellé</label>
+      <input class="form-control" id="libelle" name="libelle" required maxlength="150" placeholder="Ex. : transport, électricité, loyer…" value="{{ dep.libelle if dep else '' }}"></div>
+  </div>
+  {{ m.boutons(url_for('depenses')) }}
+</form>
+</div></div>
+{% endblock %}

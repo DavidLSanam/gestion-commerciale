@@ -1,0 +1,34 @@
+{% extends "base.html" %}{% import "_macros.html" as m %}
+{% block content %}
+{{ m.entete(("Modifier la" if id else "Nouvelle") ~ " vente", "cart-check", None, None) }}
+<div class="card shadow-sm border-0" style="max-width:640px"><div class="card-body">
+<form method="post">
+  <div class="row g-3">
+    <div class="col-md-6"><label class="form-label" for="date_vente">Date</label>
+      <input type="date" class="form-control" id="date_vente" name="date_vente" required value="{{ vente.date_vente if vente else today }}"></div>
+    <div class="col-md-6"><label class="form-label" for="id_produit">Produit vendu</label>
+      <select class="form-select" id="id_produit" name="id_produit" required>
+        {% for p in prods %}<option value="{{ p.id_produit }}" data-prix="{{ p.prix_vente }}" data-stock="{{ p.stock }}"
+           {{ 'selected' if vente and vente.id_produit|string == p.id_produit|string }}>{{ p.designation }} — stock : {{ p.stock }}</option>{% endfor %}
+      </select></div>
+    <div class="col-md-6"><label class="form-label" for="quantite">Quantité vendue</label>
+      <input type="number" min="1" step="1" class="form-control" id="quantite" name="quantite" required value="{{ vente.quantite if vente else '' }}"></div>
+    <div class="col-md-6"><label class="form-label" for="prix_unitaire">Prix de vente unitaire (FCFA)</label>
+      <input type="number" min="0" step="0.01" class="form-control" id="prix_unitaire" name="prix_unitaire" required value="{{ vente.prix_unitaire if vente else '' }}">
+      <div class="form-text">Pré-rempli avec le prix catalogue, modifiable.</div></div>
+  </div>
+  <p class="mt-3 mb-0 text-muted">Montant total : <strong id="total">—</strong></p>
+  {{ m.boutons(url_for('ventes')) }}
+</form>
+</div></div>
+{% endblock %}
+{% block scripts %}
+<script>
+const s = document.getElementById('id_produit'), q = document.getElementById('quantite'),
+      p = document.getElementById('prix_unitaire'), t = document.getElementById('total');
+function maj(){ const v=(+q.value||0)*(+p.value||0); t.textContent = v ? v.toLocaleString('fr-FR')+' FCFA' : '—'; }
+function prix(){ p.value = s.selectedOptions[0].dataset.prix; maj(); }
+s.onchange = prix; q.oninput = p.oninput = maj;
+if (!p.value) prix(); else maj();
+</script>
+{% endblock %}
